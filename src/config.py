@@ -40,7 +40,8 @@ class Development(Global):
     SHOW_ENDPOINTS = True
     EXPLAIN_TEMPLATE_LOADING = False
 
-    SERVER_NAME = 'lookingfor.group'
+    # comment it for bypassing the domain check
+    # SERVER_NAME = 'lookingfor.group'
     PREFFERED_URL_SCHEME = 'http'
     SESSION_COOKIE_SECURE = False
 
