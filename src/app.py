@@ -2,6 +2,9 @@ import logging
 import logging.config
 import os
 
+from Extensions.Nestable.Flask import Flask42
+from Extensions.Nestable.utils import import_string
+
 from flask import Flask
 
 __author__ = 'lonnstyle'
@@ -17,7 +20,7 @@ class Application:
         Args:
             launch_mode: which mode is the app being launched
         """
-        self.app = Flask(__name__)
+        self.app = Flask42(__name__)
         self.launch_mode = launch_mode
         modes = {'web_dev':('config.Development',self.make_http)}
 
@@ -45,4 +48,29 @@ class Application:
         Returns:
             Flask application   
         """
+        blue_site = import_string("Application.collection:collection")
+        self.app.register_blueprint(blue_site)
+        if self.app.config['DEBUG'] and self.app.config['SHOW_ENDPOINTS']:
+            print()
+            print()
+            collections = {}
+            for _endpoint in self.app.url_map._rules_by_endpoint:
+                _collection = _endpoint.rsplit('.', 1)[0]
+                if _collection not in collections:
+                    collections[_collection] = []
+                for _rule in self.app.url_map._rules_by_endpoint[_endpoint]:
+                    tmp = []
+                    for is_dynamic, data in _rule._trace:
+                        if is_dynamic:
+                            tmp.append(u'<%s>' % data)
+                        else:
+                            tmp.append(data)
+                    readable_path = repr((u''.join(tmp)).lstrip(u'|')).lstrip(u'u')
+                    collections[_collection].append({'endpoint': _endpoint, 'url': readable_path})
+        for _collection in collections:
+            print()
+            print(_collection)
+            for view in collections[_collection]:
+                print(' - {:⋅<60}▸ {:<60}'.format(view['url'].strip('\''), view['endpoint']))
+        print()
         return self.app
