@@ -53,6 +53,8 @@ class Application:
         if self.app.config['DEBUG'] and self.app.config['SHOW_ENDPOINTS']:
             print()
             print()
+            print('Application Endpoints')
+            print()
             collections = {}
             for _endpoint in self.app.url_map._rules_by_endpoint:
                 _collection = _endpoint.rsplit('.', 1)[0]

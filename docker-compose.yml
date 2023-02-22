@@ -14,9 +14,21 @@ services:
     user: ${UID:-1000}:${GID:-1000}
     working_dir: /application
     command: >
-      python run.py
+      dockerize -wait tcp://mongodb:27017 -timeout 30s python run.py
     ports:
       - "8000:8000"
+
+  mongodb:
+    image: lfg-mongodb:latest
+    privileged: true
+    volumes:
+      - /data/mongo_db:/data/mongo_db
+      - ../MongoDB/configs/development/mongod.conf:/etc/mongod.conf
+    networks:
+      - lfg-net
+    hostname: mongodb
+    command: >
+      mongod  --config /etc/mongod.conf
 
 networks:
   lfg-net:

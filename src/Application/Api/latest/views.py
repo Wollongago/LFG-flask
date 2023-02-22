@@ -8,4 +8,4 @@ class TestView(Classy42):
     decorators = []
 
     def index(self):
-        return 'test v1'
+        return {"payload":"test"}
