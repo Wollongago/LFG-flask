@@ -2,7 +2,7 @@ import logging
 import logging.config
 import os
 
-from Extensions import flask_pymongo, marshmallow
+from Extensions import celery_app, flask_pymongo, marshmallow
 from Extensions.Nestable.Flask import Flask42
 from Extensions.Nestable.utils import import_string
 from flask import Flask
@@ -22,7 +22,8 @@ class Application:
         """
         self.app = Flask42(__name__)
         self.launch_mode = launch_mode
-        modes = {'web_dev':('config.Development',self.make_http)}
+        modes = {'web_dev':('config.Development',self.make_http),
+                 'celery':('config.Celery',self.make_celery)}
 
         if launch_mode not in modes:
             raise KeyError('WRONG LAUNCH MODE')
@@ -36,6 +37,8 @@ class Application:
         """
         # Load Flask config
         self.app.config.from_object(self.config)
+        # import Celery config
+        celery_app.config_from_object('Celery.celery_config',force=False)
         # Setup the Logs
         self.app.logger_name = self.app.config['LOGGER_NAME']
         self.app._logger = logging.getLogger(self.app.logger_name)
@@ -81,3 +84,25 @@ class Application:
                 print(' - {:⋅<60}▸ {:<60}'.format(view['url'].strip('\''), view['endpoint']))
         print()
         return self.app
+    
+
+    def make_celery(self):  
+        """Make Celery Application
+        
+        Returns:
+            os.getcwd()
+        """
+        flask_pymongo.init_app(self.app)
+        TaskBase = celery_app.Task
+        current_app = self.app
+
+        class ContextTask(TaskBase):
+            abstract = True
+
+            def __call__(self, *args, **kwargs):
+                with current_app.app_context():
+                    return TaskBase.__call__(self, *args, **kwargs)
+                
+        celery_app.Task = ContextTask
+
+        return celery_app
