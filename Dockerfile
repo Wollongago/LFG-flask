@@ -24,6 +24,10 @@ ENV LANG en_US.UTF-8
 ENV LANGUAGE en_US:en  
 ENV LC_ALL en_US.UTF-8     
 
+COPY docker /build
+
+RUN mv /build/celery.sh /usr/local/bin
+RUN mv /build/http.sh /usr/local/bin
 
 # Remove build files
 RUN rm -rf /build
@@ -33,6 +37,7 @@ RUN rm -rf /build
 COPY src/*.py /application/
 COPY src/Extensions /application/Extensions
 COPY src/Application /application/Application
+COPY src/Celery /application/Celery
 
 # Set exit signal
 STOPSIGNAL SIGINT
