@@ -37,3 +37,11 @@ logs:
 bash:
 	@echo "============= Entering Flask bash shell as $(UID):$(GID) ============="
 	@docker exec --user $(UID):$(GID) -it $$(docker ps -aqf "name=lfg-flask-http-1") /bin/bash
+
+build:
+	@echo "============= Building http ============="
+	test -n "$(VERSION)" # $$VERSION
+	docker build --label lfg.flask.version=$(VERSION) \
+	-t lfg-flask-http:$(VERSION) \
+	-t lfg-flask-http:latest \
+	-f Dockerfile .

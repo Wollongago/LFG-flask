@@ -2,9 +2,9 @@ import logging
 import logging.config
 import os
 
+from Extensions import flask_pymongo, marshmallow
 from Extensions.Nestable.Flask import Flask42
 from Extensions.Nestable.utils import import_string
-
 from flask import Flask
 
 __author__ = 'lonnstyle'
@@ -48,6 +48,11 @@ class Application:
         Returns:
             Flask application   
         """
+        # initialize the extensions
+        flask_pymongo.init_app(self.app)
+        marshmallow.init_app(self.app)
+
+        # init blueprints
         blue_site = import_string("Application.collection:collection")
         self.app.register_blueprint(blue_site)
         if self.app.config['DEBUG'] and self.app.config['SHOW_ENDPOINTS']:
