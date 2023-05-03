@@ -31,7 +31,7 @@ class UserView(Classy42):
         user_schema = UserSchema()
         errors = user_schema.validate(user_data)
         if errors:
-            return errors, 400
+            return {'error': errors}, 400
         # Check if user with given email exists
         existing_user = User.find_one({'email': user_data['email']})
         if existing_user:
@@ -43,8 +43,6 @@ class UserView(Classy42):
         )
         # Save new user to database
         user.save(user)
-
-        
 
         # Return success message
         return 'User registered successfully!'
