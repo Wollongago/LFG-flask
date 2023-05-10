@@ -16,7 +16,7 @@ class User(UserDict):
     """
 
     _data = {
-        '_id': None,
+       
         'username': None,
         'email': None,
         'password': None,
@@ -24,23 +24,29 @@ class User(UserDict):
 
     def __init__(self,_id=None, _data=None, username=None, email=None, password=None):
         super().__init__(copy.deepcopy(self._data))
+        print(self._data)
         if _data is not None:
             self.update(_data)
     
         find_by = {}
+        print(self._data)
         if _id is not None:
-            find_by['_id'] = _id if isinstance(_id, ObjectId) else ObjectId(_id)
+            self._data['_id'] = _id if isinstance(_id, ObjectId) else ObjectId(_id)
+    
         if email is not None:
-            find_by['email'] = email.lower()
+            self._data['email'] = email.lower()
         if username is not None:
-            find_by['username'] = username
+            self._data['username'] = username
         if len(find_by) > 0:
             user = flask_pymongo.db.users.find_one(find_by)
             if user is not None:
                 self.update(user)
         
+
         if password is not None:
-            self['password'] = self.generate_password(password)
+            self._data['password'] = self.generate_password(password)
+
+        
 
 
     @classmethod
@@ -79,10 +85,18 @@ class User(UserDict):
         return cls(_data=user)
 
     def save(self):
-        # print (self._data)
-        flask_pymongo.db.users.update_one({
-            '_id': self.id}, {'$set': self._data},
-            upsert=True)
+
+
+        if "_id" in self._data and self._data["_id"] is not None:
+            flask_pymongo.db.users.update_one({
+                '_id': self.id}, {'$set': self._data},
+                upsert=True)
+            print("update")  
+        else:
+            flask_pymongo.db.users.insert_one(self._data)
+            print("insert")
+        
+
         
         
 

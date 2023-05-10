@@ -27,7 +27,9 @@ class UserView(Classy42):
     def register_user(self):
         # Load user input data
         user_data = request.get_json()
+        print("user data")
         print(user_data)
+        print("-"*50)
         # Validate user input data
         user_schema = UserSchema()
         print(user_schema.load(user_data))
@@ -38,11 +40,12 @@ class UserView(Classy42):
         existing_user = flask_pymongo.db.users.find_one({'email': user_data['email']})
         if existing_user:
             return { "error": "User already exists" }, 400
+        logger.error(user_data['username'])
         # Create new user object
         user = User(
             username=user_data['username'],
             email=user_data['email'],
-            password=generate_password_hash(user_data['password']).decode('utf-8')
+            password=user_data['password']
         )
         print(user.data)
         # Save new user to database
