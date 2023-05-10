@@ -12,3 +12,4 @@ itsdangerous==0.24
 celery==5.2.7
 redis==4.3.4
 marshmallow==2.19.2
+flask_bcrypt==1.0.1
