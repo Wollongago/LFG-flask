@@ -17,22 +17,23 @@ class User(UserDict):
 
     _data = {
         '_id': None,
-        'avatar': None,
+        'username': None,
+        'email': None,
         'password': None,
     }
 
-    def __init__(self,_id=None, data=None, email=None, name=None, password=None):
+    def __init__(self,_id=None, _data=None, username=None, email=None, password=None):
         super().__init__(copy.deepcopy(self._data))
-        if data is not None:
-            self.update(data)
+        if _data is not None:
+            self.update(_data)
     
         find_by = {}
         if _id is not None:
             find_by['_id'] = _id if isinstance(_id, ObjectId) else ObjectId(_id)
         if email is not None:
             find_by['email'] = email.lower()
-        if name is not None:
-            find_by['name'] = name
+        if username is not None:
+            find_by['username'] = username
         if len(find_by) > 0:
             user = flask_pymongo.db.users.find_one(find_by)
             if user is not None:
@@ -48,41 +49,45 @@ class User(UserDict):
             data['password_hash'] = cls.generate_password(data['password'])
             del data['password']
         # data['created_at'] = datetime.datetime.utcnow()
-        user = cls(data=data)
+        user = cls(_data=data)
         return user
 
     @property
     def id(self):
-        return self.data.get('_id', None)
+        return self._data.get('_id', None)
 
     @staticmethod
     def generate_password(password):
         return str.encode(crypt.crypt(password, salt=crypt.METHOD_SHA512))
 
     def check_password(self, input_password):
-        password_hash = self.data.get('password_hash', None)
+        password_hash = self._data.get('password_hash', None)
         if password_hash is None:
             return False
         password_hash = password_hash.decode()
         return crypt.crypt(input_password, password_hash) == password_hash
 
     def insert(self):
-        del self.data['_id']
-        self.data['_id'] = flask_pymongo.db.users.insert_one(self.data).inserted_id
+        del self._data['_id']
+        self._data['_id'] = flask_pymongo.db.users.insert_one(self._data).inserted_id
 
     @classmethod
     def find_one(cls, query):
         user = flask_pymongo.db.users.find_one(query)
         if user is None:
             return None
-        return cls(data=user)
+        return cls(_data=user)
 
-    @classmethod
-    def save(cls, user):
-        flask_pymongo.db.users.update_one({'_id': user.id}, {'$set': user.data})
+    def save(self):
+        # print (self._data)
+        flask_pymongo.db.users.update_one({
+            '_id': self.id}, {'$set': self._data},
+            upsert=True)
+        
+        
 
 
     def __str__(self):
-        return "<%s (id:%s, name:%s)>" % (self.__class__.__name__,
+        return "<%s (id:%s, username:%s)>" % (self.__class__.__name__,
                                                     self.id,
-                                                    self.get('name', None))
+                                                    self.get('username', None))

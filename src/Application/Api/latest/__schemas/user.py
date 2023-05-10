@@ -25,10 +25,10 @@ class UserSchema(Schema):
     game_account = fields.Str(validate=validate.Length(max=50))
     avatar = fields.Str(validate=validate.Length(max=100))
 
-    @validates('user')
-    def validate_user(self, value):
-        if not flask_pymongo.db.users.find_one({'_id': ObjectId(value)}):
-            raise ValidationError('User does not exist', 'user')
+    # @validates('user')
+    # def validate_user(self, value):
+    #     if not flask_pymongo.db.users.find_one({'_id': ObjectId(value)}):
+    #         raise ValidationError('User does not exist', 'user')
     
     # check if valid username
     @validates_schema
@@ -37,10 +37,10 @@ class UserSchema(Schema):
             raise ValidationError('Username already exists', 'username')
         
     # check if valid email
-    @validates_schema
-    def validate_email(self, data):
-        if not flask_pymongo.db.users.find_one({'email': data['email']}):
-            raise ValidationError('Email does not exist', 'email')
+    # @validates_schema
+    # def validate_email(self, data):
+    #     if not flask_pymongo.db.users.find_one({'email': data['email']}):
+    #         raise ValidationError('Email does not exist', 'email')
     
     
     @post_load

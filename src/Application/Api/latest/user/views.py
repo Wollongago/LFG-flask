@@ -2,8 +2,8 @@ import logging
 
 from flask_bcrypt import generate_password_hash, check_password_hash
 
-from models import User
-from src.Application.Api.latest.__schemas.user import UserSchema
+from Application.models import User
+from Application.Api.latest.__schemas.user import UserSchema
 from bson import ObjectId
 from Extensions import flask_pymongo
 from Extensions.Nestable.Classy import Classy42
@@ -27,25 +27,29 @@ class UserView(Classy42):
     def register_user(self):
         # Load user input data
         user_data = request.get_json()
+        print(user_data)
         # Validate user input data
         user_schema = UserSchema()
-        errors = user_schema.validate(user_data)
-        if errors:
-            return {'error': errors}, 400
+        print(user_schema.load(user_data))
+        # errors = user_schema.validate(user_data)
+        # if errors:
+        #     return {'error': errors}, 400
         # Check if user with given email exists
         existing_user = flask_pymongo.db.users.find_one({'email': user_data['email']})
         if existing_user:
             return { "error": "User already exists" }, 400
         # Create new user object
         user = User(
+            username=user_data['username'],
             email=user_data['email'],
             password=generate_password_hash(user_data['password']).decode('utf-8')
         )
+        print(user.data)
         # Save new user to database
-        user.save(user)
-
+        user.save()
+        
         # Return success message
-        return 'User registered successfully!'
+        return {'payload': "saved"}
 
     @route('/login', methods=['POST'])
     def login_user(self):
