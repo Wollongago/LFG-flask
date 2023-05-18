@@ -1,9 +1,15 @@
 from steam import Steam
-import os
-#from src.credentials import STEAM_API_KEY
+
+from src.credentials import STEAM_API_KEY
+
+#import os
+
 steam = Steam(STEAM_API_KEY)
 
 class SteamParser():
+    def get_user_details():
+        user = steam.users.get_user_details("<steam_id>")
+
     def get_game_details():
         apex_app_id = 1172470
 
@@ -20,6 +26,6 @@ class SteamParser():
 
 # testing output
 if __name__ == "__main__":
-    print(os.getcwd)
-    user = steam.users.get_user_details("76561197960520747")
+    #print(os.getcwd)
+    user = get_user_details("76561197960520747")
     print(user)
