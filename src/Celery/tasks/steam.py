@@ -6,7 +6,8 @@ from Extensions import celery_app
 
 @celery_app.task
 def update_user_schema():
-    user.fields.game_account = get_user_details('steamid')
+    profile = get_user_details()
+    user.fields.game_account = profile('steamid')
 
 @celery_app.task
 def sync_user_profile(steam_id):
