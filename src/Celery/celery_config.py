@@ -7,7 +7,7 @@ import config
 from kombu import Queue
 
 # broker_url = 'amqp://KycKyc:%s@%s//' % (config.Global.BROKER_PASSWORD, config.Global.BROKER_ADDRESS)
-broker_url = config.Celery.BROKER_URL
+broker_url = config.Global.BROKER_URL
 broker_pool_limit = 16  # 16 connection, default 10.
 
 #: Only add pickle to this list if your broker is secured
@@ -71,3 +71,6 @@ result_expires = 60*60*24  # Once in a day.
 CELERY_MONGODB_SCHEDULER_DB = "LFG"
 CELERY_MONGODB_SCHEDULER_COLLECTION = "celery_schedules"
 CELERY_MONGODB_SCHEDULER_URL = 'mongodb://%s:%s/' % ("mongodb", 27017)
+
+# print broker_url
+print(f"broker_url: {broker_url}")
