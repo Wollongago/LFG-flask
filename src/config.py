@@ -32,8 +32,17 @@ class Global(object):
     MONGO_URI = "mongodb://mongodb:27017/LFG?maxPoolSize=200"
 
     # TODO:AMPQ Broker SETTINGS
+    BROKER_ADDRESS = 'rabbitmq'
+    BROKER_PASSWORD = credentials.BROKER_PASSWORD
+    BROKER_URL = 'amqp://Wollongago:%s@%s:5672//' % (BROKER_PASSWORD, BROKER_ADDRESS)
 
     # TODO:Cache
+    CACHE_TYPE = 'redis'
+    CACHE_REDIS_HOST = 'redis'
+    CACHE_REDIS_PORT = '6379'
+    CACHE_REDIS_PASSWORD = credentials.CACHE_REDIS_PASSWORD
+    CACHE_KEY_PREFIX = "Warframe:"
+    CACHE_REDIS_DB = 0
 
 class Development(Global):
     DEBUG = True
@@ -104,3 +113,4 @@ class Development(Global):
 
         }
     }
+
