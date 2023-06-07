@@ -36,10 +36,14 @@ class UserView(Classy42):
         # errors = user_schema.validate(user_data)
         # if errors:
         #     return {'error': errors}, 400
+
+        existing_user = flask_pymongo.db.users.find_one({'username': user_data['username']})
+        if existing_user:
+            return { "error": "Username already exists" }
         # Check if user with given email exists
         existing_user = flask_pymongo.db.users.find_one({'email': user_data['email']})
         if existing_user:
-            return { "error": "User already exists" }, 400
+            return { "error": "Email already exists" }
         logger.error(user_data['username'])
         # Create new user object
         user = User(
