@@ -8,3 +8,4 @@ import Celery.celery_scheduler
 from Extensions import celery_app, flask_pymongo
 
 print("Registered Tasks:",pformat(celery_app.tasks))
+
