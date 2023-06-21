@@ -68,4 +68,6 @@ if [ -n "${FILENlfgE:+x}" ] && [ ! -z ${CASE} ];then
 elif [ ! -z ${CASE} ]; then
     echo -e "${GREEN}Case: ${PURPLE}${CASE}${NO_COLOR}"
     docker-compose -p lfg exec lfg-flask /bin/bash -c "python3 -W ignore:ResourceWarning -m unittest discover -v -s Tests/cases/${CASE}"
+else
+    docker-compose -p lfg exec lfg-flask /bin/bash -c "python3 -W ignore:ResourceWarning -m unittest discover -v -s Tests/cases"
 fi
