@@ -23,7 +23,8 @@ class Application:
         self.app = Flask42(__name__)
         self.launch_mode = launch_mode
         modes = {'web_dev':('config.Development',self.make_http),
-                 'celery':('config.Global',self.make_celery)}
+                'celery':('config.Global',self.make_celery),
+                'unit_test':('config.Testing',self.make_http)}
 
         if launch_mode not in modes:
             raise KeyError('WRONG LAUNCH MODE')

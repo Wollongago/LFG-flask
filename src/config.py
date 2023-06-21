@@ -113,4 +113,13 @@ class Development(Global):
 
         }
     }
-
+class Testing(Global):
+    DEBUG = True
+    SHOW_ENDPOINTS = True
+    
+    # MONGOENGINE SETTINGS
+    # USING TESTING.DB
+    MONGODB_SETTINGS = dict(Global.MONGODB_SETTINGS)
+    MONGODB_SETTINGS['DB'] = 'Testing'
+    # PY-MONGO SETTINGS
+    MONGO_URI = "mongodb://mongodb:27017/Testing?maxPoolSize=200"
