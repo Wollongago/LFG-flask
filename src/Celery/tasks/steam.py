@@ -5,34 +5,29 @@ from Extensions import celery_app, flask_pymongo
 def sync_user_profile():
     print("sync_user_profile")
     # TODO: Add code to sync the user's profile to your application's database
-    steam_ids = [76561197960520747, 76561198034973737]
-    parser_instances = []
+    parser = SteamParser()
+    
+    users = flask_pymongo.db.user.find()
+    for user in users:
 
-    for steam_id in steam_ids:
-        parser = SteamParser()
-        parser.create_parser(steam_id)
-        parser_instances.append(parser)
+        # Get user's STEAM ID then update that instance
+        get_steam_id = user['steam_profile']['steam_id']
+        
+        # Create/Update User Instance
+        parser.update_parser(get_steam_id)
+        parse_user_details = parser.get_user_details()
+        parse_user_games = parser.get_user_games()
+        parse_user_app_achievements = parser.get_user_app_achievements()
 
-    for parser in parser_instances:
-        parser.get_user_details()
-        parser.get_user_games()
-        parser.get_user_app_achievements()
-        print(parser)
-
-        query = {"game_id": str(parser.steam_id)}
-        queryall = flask_pymongo.db.user.find(query)
-
-        for user in queryall:
-            if user.get("game_id") == str(parser.steam_id):
-                flask_pymongo.db.user.update_one(
-                    {"game_id": str(parser.steam_id)},
-                    {
-                        "$set": {
-                            "username": parser.username_value,
-                            "profile_url": parser.profile_url,
-                            "country": parser.country_loc,
-                            "games_owned": parser.game_list,
-                            "apex_achievements": parser.achievements
-                        }
+        flask_pymongo.db.user.update_one(
+                {"game_id": str(get_steam_id)},
+                {
+                    "$set": {
+                        "username": parse_user_details[0],
+                        "profile_url": parse_user_details[1],
+                        "country": parse_user_details[2],
+                        "games_owned": parse_user_games,
+                        "apex_achievements": parse_user_app_achievements
                     }
-                )
+                }
+            )

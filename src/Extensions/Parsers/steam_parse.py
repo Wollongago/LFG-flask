@@ -5,9 +5,8 @@ from src.credentials import STEAM_API_KEY
 steam = Steam(STEAM_API_KEY)
 
 class SteamParser():
-    def create_parser(self, steam_id):
+    def update_parser(self, steam_id):
         self.steam_id = steam_id
-        return(self.steam_id)
 
     # Gets any user's profile data/details
     def get_user_details(self):
@@ -49,19 +48,15 @@ class SteamParser():
     
 # testing output
 if __name__ == "__main__":
-    steam_ids = [76561197960520747, 76561198034973737]
-    parser_instances = []
-
-    for steam_id in steam_ids:
         parser = SteamParser()
-        parser.create_parser(steam_id)
-        parser_instances.append(parser)
+        get_steam_id = 76561197960520747
+        parser.update_parser(get_steam_id)
+        parse_user_details = parser.get_user_details()
+        parse_user_games = parser.get_user_games()
+        parse_user_app_achievements = parser.get_user_app_achievements()
 
-    for parser in parser_instances:
-        parser.get_user_details()
-        parser.get_user_games()
-        parser.get_user_app_achievements()
-        print(parser.steam_id)
+        print(type(get_steam_id))
+
 
 
 
