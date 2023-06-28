@@ -1,10 +1,12 @@
 import unittest
+
 from Celery.tasks.steam import SteamParser
 from Tests.cases.base import BaseTest
 
-class Test(BaseTest):
+
+class TestSteam(BaseTest):
   
-  def test_steam(self):
+  def test_steam_sync(self):
     parser = SteamParser()
     get_steam_id = str(76561198034973737) # Testing case
 
@@ -28,7 +30,3 @@ class Test(BaseTest):
     self.assertEqual(testDocument["country"], parse_user_details[2])
     self.assertEqual(testDocument["games_owned"], parse_user_games)
     self.assertEqual(testDocument["apex_achievements"], parse_user_app_achievements)
-
-
-if __name__ == "__main__":
-    unittest.main()

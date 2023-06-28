@@ -70,5 +70,5 @@ elif [ ! -z ${CASE} ]; then
     docker-compose -p lfg exec flask-http /bin/bash -c "python3 -W ignore:ResourceWarning -m unittest discover -v -s Tests/cases/${CASE}"
 else
     echo -e "${PURPLE}Run all test ${NO_COLOR}"
-    docker-compose -p lfg exec flask-http /bin/bash -c "python3 -W ignore:ResourceWarning -m unittest discover -v -s Tests/cases"
+    docker-compose -p lfg exec flask-http /bin/bash -c "python3 -m unittest discover -s Tests/cases -v -p 'test*.py'"
 fi
