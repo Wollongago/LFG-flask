@@ -5,10 +5,10 @@ import os
 import pprint
 import sys
 import unittest
-from unittest import TestCase
 
 from app import Application
 from Extensions import flask_pymongo
+from flask_testing import TestCase
 
 __author__ = 'lonnstyle'
 app = None
@@ -37,12 +37,12 @@ class BaseTest(TestCase):
         return app
     
     def setUp(self):
-        self.client.__enter__()
+        # self.client.__enter__()
         flask_pymongo.db.set_profiling_level(2)
         print()
 
     def tearDown(self):
-        self.client.__exit__(None, None, None)
+        # self.client.__exit__(None, None, None)
         flask_pymongo.db.set_profiling_level(0)
         flask_pymongo.db.system.profile.drop()
 

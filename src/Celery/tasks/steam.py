@@ -1,5 +1,6 @@
-from Extensions.Parsers.steam_parse import SteamParser
 from Extensions import celery_app, flask_pymongo
+from Extensions.Parsers.steam_parse import SteamParser
+
 
 @celery_app.task(name="steam.sync")
 def sync_user_profile():
@@ -15,19 +16,19 @@ def sync_user_profile():
         
         # Create/Update User Instance
         parser.update_parser(get_steam_id)
-        parse_user_details = parser.get_user_details()
-        parse_user_games = parser.get_user_games()
-        parse_user_app_achievements = parser.get_user_app_achievements()
+        username, profile_url, country = parser.get_user_details()
+        games = parser.get_user_games()
+        app_achievements = parser.get_user_app_achievements()
 
         flask_pymongo.db.user.update_one(
                 {"game_id": str(get_steam_id)},
                 {
                     "$set": {
-                        "username": parse_user_details[0],
-                        "profile_url": parse_user_details[1],
-                        "country": parse_user_details[2],
-                        "games_owned": parse_user_games,
-                        "apex_achievements": parse_user_app_achievements
+                        "username": username,
+                        "profile_url": profile_url,
+                        "country": country,
+                        "games_owned": games,
+                        "apex_achievements": app_achievements
                     }
                 }
             )

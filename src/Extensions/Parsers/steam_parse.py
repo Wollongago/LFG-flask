@@ -1,6 +1,7 @@
-from steam import Steam
 from copy import deepcopy
-from src.credentials import STEAM_API_KEY
+
+from credentials import STEAM_API_KEY
+from steam import Steam
 
 steam = Steam(STEAM_API_KEY)
 
@@ -14,7 +15,7 @@ class SteamParser():
         self.username_value = self.user.get("player", None).get("personaname", None)
         self.profile_url = self.user.get("player", None).get("profileurl", None)
         self.country_loc = self.user.get("player", None).get("loccountrycode", None)
-        print (self.username_value, self.profile_url, self.country_loc)
+        # print (self.username_value, self.profile_url, self.country_loc)
         return (self.username_value, self.profile_url, self.country_loc)
     
     # Gets any user's whole game-library and their full playtime in minutes
@@ -46,17 +47,3 @@ class SteamParser():
         print(self.achievements)
         return self.achievements
     
-# testing output
-if __name__ == "__main__":
-        parser = SteamParser()
-        get_steam_id = 76561197960520747
-        parser.update_parser(get_steam_id)
-        parse_user_details = parser.get_user_details()
-        parse_user_games = parser.get_user_games()
-        parse_user_app_achievements = parser.get_user_app_achievements()
-
-        print(type(get_steam_id))
-
-
-
-
