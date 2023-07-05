@@ -1,4 +1,5 @@
 import unittest
+from pprint import pprint
 
 from Extensions import flask_pymongo
 from Extensions.Parsers.steam_parse import SteamParser
@@ -28,4 +29,4 @@ class TestSteam(BaseTest):
     assert profile_url == 'https://steamcommunity.com/id/fourier69/'
     assert type(games) == list
     assert type(app_achievements) == list
-    print(f'username: {username}, profile_url: {profile_url}, country: {country}, games: {games}, app_achievements: {app_achievements}')
+    pprint(f'username: {username},\n profile_url: {profile_url},\n country: {country},\n games: {games},\n app_achievements: {app_achievements}')

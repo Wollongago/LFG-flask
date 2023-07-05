@@ -44,6 +44,5 @@ class SteamParser():
     def get_user_app_achievements(self):
         self.user_app_details = steam.apps.get_user_achievements(self.steam_id, 1172470) # 1172470 = APEX LEGENDS ID ON STEAM
         self.achievements = self.user_app_details.get("playerstats", None).get("achievements", None)
-        print(self.achievements)
         return self.achievements
     
