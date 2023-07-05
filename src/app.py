@@ -78,11 +78,11 @@ class Application:
                             tmp.append(data)
                     readable_path = repr((u''.join(tmp)).lstrip(u'|')).lstrip(u'u')
                     collections[_collection].append({'endpoint': _endpoint, 'url': readable_path})
-        for _collection in collections:
-            print()
-            print(_collection)
-            for view in collections[_collection]:
-                print(' - {:⋅<60}▸ {:<60}'.format(view['url'].strip('\''), view['endpoint']))
+            for _collection in collections:
+                print()
+                print(_collection)
+                for view in collections[_collection]:
+                    print(' - {:⋅<60}▸ {:<60}'.format(view['url'].strip('\''), view['endpoint']))
         print()
         return self.app
     

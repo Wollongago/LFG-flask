@@ -9,7 +9,7 @@ from Extensions import flask_pymongo
 from Extensions.Nestable.Classy import Classy42
 from Extensions.Nestable.flask_classy import route
 from flask import request
-
+# from Celery.tasks.steam import sync_user_profile (USED endpoint to test, since having import issues)
 
 __author__ = 'lonnstyle'
 
@@ -73,3 +73,8 @@ class UserView(Classy42):
         #     return 'Invalid password', 401
         # User is authenticated, return success message
         return 'User authenticated successfully!'
+
+    # USED this endpoint to test due to import issues
+    # @route('/steam', methods=['GET'])
+    # def steam_test(self):
+    #     return sync_user_profile()  

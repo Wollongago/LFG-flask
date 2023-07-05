@@ -115,7 +115,7 @@ class Development(Global):
     }
 class Testing(Global):
     DEBUG = True
-    SHOW_ENDPOINTS = True
+    SHOW_ENDPOINTS = False
     
     # MONGOENGINE SETTINGS
     # USING TESTING.DB

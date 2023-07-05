@@ -61,13 +61,14 @@ if [ -n "${FILENlfgE:+x}" ] && [ ! -z ${CASE} ];then
     echo -e "${GREEN}File: ${PURPLE}${FILENlfgE}${NO_COLOR}"
     if [ ! -z ${CLASSS_METHOD} ]; then
         echo -e "${GREEN}Class and method: ${PURPLE}${CLASSS_METHOD}${NO_COLOR}"
-        docker-compose -p lfg exec lfg-flask /bin/bash -c "python3 -W ignore:ResourceWarning -m unittest -v Tests.cases.${CASE}.${FILENlfgE}.${CLASSS_METHOD}"
+        docker-compose -p lfg exec flask-http /bin/bash -c "python3 -W ignore:ResourceWarning -m unittest -v Tests.cases.${CASE}.${FILENlfgE}.${CLASSS_METHOD}"
     else
-        docker-compose -p lfg exec lfg-flask /bin/bash -c "python3 -W ignore:ResourceWarning -m unittest -v Tests.cases.${CASE}.${FILENlfgE}"
+        docker-compose -p lfg exec flask-http /bin/bash -c "python3 -W ignore:ResourceWarning -m unittest -v Tests.cases.${CASE}.${FILENlfgE}"
     fi
 elif [ ! -z ${CASE} ]; then
     echo -e "${GREEN}Case: ${PURPLE}${CASE}${NO_COLOR}"
-    docker-compose -p lfg exec lfg-flask /bin/bash -c "python3 -W ignore:ResourceWarning -m unittest discover -v -s Tests/cases/${CASE}"
+    docker-compose -p lfg exec flask-http /bin/bash -c "python3 -W ignore:ResourceWarning -m unittest discover -v -s Tests/cases/${CASE}"
 else
-    docker-compose -p lfg exec lfg-flask /bin/bash -c "python3 -W ignore:ResourceWarning -m unittest discover -v -s Tests/cases"
+    echo -e "${PURPLE}Run all test ${NO_COLOR}"
+    docker-compose -p lfg exec flask-http /bin/bash -c "python3 -m unittest discover -s Tests/cases -v -p 'test*.py'"
 fi
