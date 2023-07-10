@@ -2,7 +2,7 @@ import unittest
 from pprint import pprint
 
 from Extensions import flask_pymongo
-from Extensions.Parsers.steam_parse import SteamParser
+from Extensions.Parsers.steam import SteamParser
 from Tests.cases.base import BaseTest
 
 

@@ -28,9 +28,6 @@ class UserView(Classy42):
     trailing_slash = False
     route_base = '/'
 
-    #FIXME: define user function to store incoming steam attributes
-    @route()
-    
     @route('/')
     def index():
         if 'steam_id' not in session:

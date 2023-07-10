@@ -1,5 +1,5 @@
 from Extensions import celery_app, flask_pymongo
-from Extensions.Parsers.steam_parse import SteamParser
+from Extensions.Parsers.steam import SteamParser
 
 
 @celery_app.task(name="steam.sync")
