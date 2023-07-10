@@ -7,6 +7,8 @@ steam = Steam(STEAM_API_KEY)
 
 class SteamParser():
     def update_parser(self, steam_id):
+        if type(steam_id) == int:
+            steam_id = str(steam_id)
         self.steam_id = steam_id
 
     # Gets any user's profile data/details
@@ -37,7 +39,7 @@ class SteamParser():
             self.game_dict["total_playtime"] = game.get("playtime_forever")
             self.game_dict["2weeks_playtime"] = game.get("playtime_2weeks")
             self.game_list.append(deepcopy(self.game_dict))
-        print(self.game_list)
+        # print(self.game_list)
         return(self.game_list)
     
     # Gets any user's app achievements (in this case, Apex Legends)
