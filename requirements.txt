@@ -29,3 +29,4 @@ redis==4.3.4
 marshmallow==2.19.2
 python-steam-api
 beautifulsoup4
+PyJWT==1.6.4

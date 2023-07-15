@@ -1,7 +1,7 @@
 import copy
 import crypt
-from collections import UserDict
 import datetime
+from collections import UserDict
 
 from bson import ObjectId
 from Extensions import flask_pymongo
@@ -16,10 +16,6 @@ class User(UserDict):
     """
 
     _data = {
-       
-        'username': None,
-        'email': None,
-        'password': None,
     }
 
     def __init__(self,_id=None, _data=None, username=None, email=None, password=None):
@@ -47,6 +43,9 @@ class User(UserDict):
             self._data['password'] = self.generate_password(password)
 
         
+    def update(self, data):
+        for key, value in data.items():
+            self._data[key] = value
 
 
     @classmethod
@@ -74,7 +73,8 @@ class User(UserDict):
         return crypt.crypt(input_password, password_hash) == password_hash
 
     def insert(self):
-        del self._data['_id']
+        if '_id' in self._data:
+            del self._data['_id']
         self._data['_id'] = flask_pymongo.db.users.insert_one(self._data).inserted_id
 
     @classmethod
@@ -85,8 +85,6 @@ class User(UserDict):
         return cls(_data=user)
 
     def save(self):
-
-
         if "_id" in self._data and self._data["_id"] is not None:
             flask_pymongo.db.users.update_one({
                 '_id': self.id}, {'$set': self._data},
@@ -97,11 +95,8 @@ class User(UserDict):
             print("insert")
         
 
-        
-        
-
 
     def __str__(self):
         return "<%s (id:%s, username:%s)>" % (self.__class__.__name__,
                                                     self.id,
-                                                    self.get('username', None))
+                                                    self.get('steam_profile', None))
