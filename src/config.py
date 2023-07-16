@@ -123,3 +123,51 @@ class Testing(Global):
     MONGODB_SETTINGS['DB'] = 'Testing'
     # PY-MONGO SETTINGS
     MONGO_URI = "mongodb://mongodb:27017/Testing?maxPoolSize=200"
+
+class Manager(Global):
+    LOGGER_NAME = 'Manager'
+    DEBUG = True
+    LOGGING = {
+        'version': 1,
+        'disable_existing_loggers': False,
+        'formatters': {
+            'verbose': {
+                'format': "[%(asctime)s][%(filename)s:%(lineno)s] %(message)s",
+                'datefmt': "%H:%M:%S"
+            },
+            'simple': {
+                'format': '%(message)s'
+            },
+        },
+        'filters': {
+            'test_filter': {
+                '()': 'Extensions.Logs.filters.TestFilter',
+            }
+        },
+        'handlers': {
+            'null': {
+                'level': 'DEBUG',
+                'class': 'logging.NullHandler',
+            },
+            'simple_console': {
+                'level': 'DEBUG',
+                'class': 'logging.StreamHandler',
+                'formatter': 'simple'
+            },
+            'verbose_console': {
+                'level': 'DEBUG',
+                'class': 'logging.StreamHandler',
+                'formatter': 'verbose'
+            }
+        },
+        'loggers': {
+            # '': {  # <- root logger
+            #     'handlers': ['simple_console'],
+            #     'level': 'DEBUG',
+            # },
+            'Manager': {
+                'handlers': ['simple_console'],
+                'level': 'DEBUG',
+            },
+        }
+    }

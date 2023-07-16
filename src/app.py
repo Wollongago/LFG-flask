@@ -24,7 +24,8 @@ class Application:
         self.launch_mode = launch_mode
         modes = {'web_dev':('config.Development',self.make_http),
                 'celery':('config.Global',self.make_celery),
-                'unit_test':('config.Testing',self.make_http)}
+                'unit_test':('config.Testing',self.make_http),
+                'manager':('config.Manager', self.make_manager)}
 
         if launch_mode not in modes:
             raise KeyError('WRONG LAUNCH MODE')
@@ -107,3 +108,15 @@ class Application:
         celery_app.Task = ContextTask
 
         return celery_app
+    
+    def make_manager(self):
+        '''
+        make_manager 
+        '''
+        # init Extensions
+        flask_pymongo.init_app(self.app)
+
+        # we should not have other extensions in manager mode
+        # at least not yet
+
+        return self.app

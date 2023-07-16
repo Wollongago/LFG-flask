@@ -1,3 +1,4 @@
+import json
 from copy import deepcopy
 
 from credentials import STEAM_API_KEY
@@ -48,3 +49,8 @@ class SteamParser():
         self.achievements = self.user_app_details.get("playerstats", None).get("achievements", None)
         return self.achievements
     
+    def get_game_detail(self, game_id):
+        self.game_detail = steam.apps.get_app_details(game_id)
+        # I have no idea why it return a string instead of a dict, just load it as json
+        self.game_detail = json.loads(self.game_detail)
+        return self.game_detail
