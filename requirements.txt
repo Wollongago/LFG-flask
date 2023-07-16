@@ -30,3 +30,4 @@ marshmallow==2.19.2
 python-steam-api
 beautifulsoup4
 PyJWT==1.6.4
+Flask-Script==2.0.6
