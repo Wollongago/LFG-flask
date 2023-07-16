@@ -40,17 +40,17 @@ def update_games():
             to_delete = list(set(game_info.keys()) - set(fields))
             for key in to_delete:
                 del game_info[key]
+            game_name = game_info['name'].lower().replace(' ','_')
+            game_name = ''.join(filter(set(string.ascii_letters + '_').__contains__, game_name))
             for key in ['header_image','background','background_raw']:
                 # save image to file and update path
 
                 # strip url to get file name
                 file_name = game_info[key].split('/')[-1]
                 file_name = file_name.split('?')[0]
-                game_name = game_info['name'].lower().replace(' ','_')
-                game_name = ''.join(filter(set(string.ascii_letters + '_').__contains__, game_name))
                 out_path = f'static/assets/games/{game_name}_{file_name}'
                 os.makedirs(os.path.dirname(out_path), exist_ok=True)
-                
+
                 print(f'Download remote asset from: {game_info[key]} to: {out_path}')
                 r = requests.get(game_info[key], stream=True)
                 if r.status_code == 200:
@@ -58,6 +58,17 @@ def update_games():
                         for chunk in r:
                             f.write(chunk)
                     game_info[key] = out_path
+            # hardcode the library portait image as not shown in steam api
+            file_name = 'library_portrait.jpg'
+            out_path = f'static/assets/games/{game_name}_{file_name}'
+            os.makedirs(os.path.dirname(out_path), exist_ok=True)
+            print(f'Download remote asset from: https://cdn.akamai.steamstatic.com/steam/apps/{game_id}/library_600x900.jpg to: {out_path}')
+            r = requests.get(f'https://cdn.akamai.steamstatic.com/steam/apps/{game_id}/library_600x900.jpg', stream=True)
+            if r.status_code == 200:
+                with open(out_path, 'wb') as f:
+                    for chunk in r:
+                        f.write(chunk)
+                game_info['library_portrait'] = out_path
 
             flask_pymongo.db.games.update({'_id': game['_id']}, {'$set': game_info}, upsert=False)
         else:
