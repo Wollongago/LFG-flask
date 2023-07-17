@@ -3,8 +3,8 @@ import logging
 
 from bson import ObjectId
 from Extensions import flask_pymongo
-from Extensions.Nestable import route
 from Extensions.Nestable.Classy import Classy42
+from Extensions.Nestable.flask_classy import route
 from flask import request
 
 from .schemas import Session, SessionDump

@@ -1,6 +1,6 @@
 from bson import ObjectId
 from Extensions import flask_pymongo
-from marshmallow import Schema, ValidationError, fields, post_load, validate
+from marshmallow import Schema, ValidationError, fields, post_load, validates
 
 
 class Session(Schema):
@@ -11,7 +11,7 @@ class Session(Schema):
     recommendedLevel = fields.Int(missing=0)
     owner = fields.Str(required=True)
     
-    @validate.validates('selectedGame')
+    @validates('selectedGame')
     def validate_selectedGame(self, value):
         if not ObjectId.is_valid(value):
             raise ValidationError('Invalid selectedGame ObjectId')
@@ -19,7 +19,7 @@ class Session(Schema):
         if not game:
             raise ValidationError('Invalid selectedGame ObjectId')
         
-    @validate.validates('owner')
+    @validates('owner')
     def validate_owner(self, value):
         if not ObjectId.is_valid(value):
             raise ValidationError('Invalid owner ObjectId')
