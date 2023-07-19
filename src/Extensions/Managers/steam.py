@@ -32,7 +32,7 @@ def update_games():
             # serialize game_info
             # on theory, the outest most key is the game_id, but we just use the first key
             game_info = game_info[list(game_info.keys())[0]]
-            logger.info('Updating Game: %s', game_info['data']['name'])
+            logger.info(f'Updating Game: {game_info["data"].get("name","")}<id:{game_id}>')
             if game_info['success'] == False:
                 logger.error('Game not found: %s', game_id)
                 continue
