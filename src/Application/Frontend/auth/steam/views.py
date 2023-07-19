@@ -7,7 +7,7 @@ from Extensions import flask_pymongo
 from Extensions.Auth.actions import login
 from Extensions.Nestable.Classy import Classy42
 from Extensions.Parsers.steam import SteamParser
-from flask import Response, current_app, request, url_for
+from flask import Response, current_app, request, url_for, make_response
 from werkzeug.exceptions import BadRequest, InternalServerError
 
 logger = logging.getLogger('Frontend')
@@ -110,9 +110,10 @@ class SteamView(Classy42):
         parser = SteamParser()
         parser.update_parser(steam_user_id)
         steam_profile = {}
-        username, profile_url, loc = parser.get_user_details()
+        username, profile_url, avatar_url, loc = parser.get_user_details()
         steam_profile['username'] = username
         steam_profile['profile_url'] = profile_url
+        steam_profile['avatar_url'] = avatar_url
         steam_profile['loc'] = loc
         steam_profile['games'] = parser.get_user_games()
 
@@ -140,4 +141,10 @@ class SteamView(Classy42):
         
         login(user,auth_type=_auth_type)
 
-        return Response(status=302,headers={'Location': redirect_location})
+        response = Response(status=302, headers={'Location': redirect_location})
+        response.set_cookie('user_id', str(user.id))
+        response.set_cookie('steam_id', steam_user_id)
+        response.set_cookie('steam_username', steam_profile['username'])
+        response.set_cookie('steam_profile_url', steam_profile['profile_url'])
+        response.set_cookie('steam_avatar_url', steam_profile['avatar_url'])
+        return response

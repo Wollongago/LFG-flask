@@ -1,6 +1,5 @@
-import json
 from copy import deepcopy
-
+import json
 from credentials import STEAM_API_KEY
 from steam import Steam
 
@@ -17,9 +16,10 @@ class SteamParser():
         self.user = steam.users.get_user_details(self.steam_id)
         self.username_value = self.user.get("player", None).get("personaname", None)
         self.profile_url = self.user.get("player", None).get("profileurl", None)
+        self.avatar_url = self.user.get("player", None).get("avatarfull", None)
         self.country_loc = self.user.get("player", None).get("loccountrycode", None)
         # print (self.username_value, self.profile_url, self.country_loc)
-        return (self.username_value, self.profile_url, self.country_loc)
+        return (self.username_value, self.profile_url, self.avatar_url, self.country_loc)
     
     # Gets any user's whole game-library and their full playtime in minutes
     def get_user_games(self):
